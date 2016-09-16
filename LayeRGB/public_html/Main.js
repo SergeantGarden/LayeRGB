@@ -22,7 +22,7 @@ window.onload = function(e)
     {
         var engine = new Engine({x: 400, y: 320 }, "LayeRGB");
         engine.Resize({x:800, y: 640});
-        engine.PreloadScripts("game/MenuScene.js, game/PickLevelScene.js, game/GameScene.js");
+        engine.PreloadScripts("game/MenuScene.js, game/GameScene.js");
         engine.PreloadAssets("MainLogo:images/logo.png, MenuMusic:audio/MenuSong.mp3, MenuMove:audio/menuMove.mp3");
         engine.onLoaded(function() {
             var scene = new MenuScene(engine);
