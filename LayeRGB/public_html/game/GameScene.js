@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-function GameScene(engine)
+function GameScene(engine, level)
 {
     Scene.call(this);
     

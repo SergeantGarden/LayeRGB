@@ -26,7 +26,7 @@ function MenuScene(engine)
         if(input.keyboard.keyPressed(KEY_CODE.SPACE))
         {
             Engine.StopAllGameAudio("LayeRGB");
-            var scene = new GameScene(engine);
+            var scene = new PickLevelScene(engine);
             engine.switchScene(scene, false);
         }
         Scene.prototype.Update.call(this, input, dt);
