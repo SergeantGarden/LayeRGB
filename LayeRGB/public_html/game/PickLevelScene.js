@@ -70,33 +70,11 @@ function PickLevelScene(engine)
                 var offsetx = ((layer[j].position.x - centerLocation.x)/ layer[j].sprite.size.x) * (size.x * 2);
                 var offsety = ((layer[j].position.y - centerLocation.y)/ layer[j].sprite.size.y) * (size.y * 2);
                 
-                console.log(size.x);
                 context.save();
                 layer[j].sprite.Draw(context, new Vector(centerLocation.x + offsetx, centerLocation.y + offsety), 0, new Vector(size.x/layer[j].sprite.size.x, size.y/layer[j].sprite.size.y));
                 context.restore();
             }
         }
-        /*for(var i = 0; i < this.levels[this.level - 1].length; ++i)
-        {
-            for(var j = this.levels[this.level - 1][i].length - 1; j >= 0 ; --j)
-            {
-                if(j === 0)
-                {
-                    var position = this.levels[this.level - 1][i][j].position;
-                    var size = this.levels[this.level - 1][i][j].size;
-                    context.save();
-                    context.shadowBlur = 10;
-                    context.shadowColor = "white";
-                    context.strokeStyle = "white";
-                    context.strokeRect(position.x, position.y, size.x, size.y);
-                    context.restore();
-                    continue;
-                }
-                context.save();
-                this.levels[this.level - 1][i][j].sprite.Draw(context, this.levels[this.level - 1][i][j].position, 0, this.levels[this.level - 1][i][j].scale);
-                context.restore();
-            }
-        }*/
         
         arrow.Draw(context, new Vector(332, 240), 0, new Vector(0.6,0.6));
         
@@ -111,15 +89,6 @@ function PickLevelScene(engine)
         Scene.prototype.Draw.call(this, context);
     };
     
-    //this.levels.push(LoadLevel(1,this.levelLayers, new Vector(35,35)));
-    //this.levels.push(LoadLevel(2,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(3,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(4,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(5,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(6,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(7,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(8,this.levelLayers, new Vector(15,15)));
-    //this.levels.push(LoadLevel(9,this.levelLayers, new Vector(15,15)));
     LevelLoadingManager.LoadLevels(LevelLoadingManager.LoadLevelData(), centerLocation, new Vector(32, 32));
 }
 
