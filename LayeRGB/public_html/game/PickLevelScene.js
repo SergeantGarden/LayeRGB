@@ -34,6 +34,11 @@ function PickLevelScene(engine)
             var scene = new GameScene(engine, this.level, this.levels);
             engine.switchScene(scene, false);
         }
+        if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
+        {
+            var scene = new MenuScene(engine);
+            engine.switchScene(scene, false);
+        }
         
         if(input.keyboard.keyPressed(KEY_CODE.LEFT) || input.keyboard.keyPressed(KEY_CODE.a))
         {
@@ -52,22 +57,37 @@ function PickLevelScene(engine)
         context.fillRect(0,0, Engine.currentGame[engine.gameTitle].originalResolution.x, Engine.currentGame[engine.gameTitle].originalResolution.y);
         context.restore();
         var level = LevelLoadingManager.getLevel(this.level);
-        
+        var layers = level.getLayers().length;
         var size = new Vector(16,16);
+        var layersOffsetx = 0;
+        var previewOffsetx = ((level.rowLength + 1) * size.x);
         
-        context.save();
-        context.shadowBlur = 10;
-        context.shadowColor = "white";
-        context.strokeStyle = "white";
-        context.strokeRect(centerLocation.x - ((level.rowLength / 2) * size.x), centerLocation.y - ((level.columnLength / 2) * size.y), level.rowLength * size.x, level.columnLength * size.y);
-        context.restore();
-        
-        for(var i = 0; i < level.getLayers().length; ++i)
+        if(layers > 1)
         {
+            
+            if(layers % 2 === 0)
+            {
+                layersOffsetx = (((level.rowLength / 2) + 1) * size.x);
+            }else if(layers === 3)
+            {
+                layersOffsetx = previewOffsetx;
+            }
+        }
+        
+        
+        for(var i = 0; i < layers; ++i)
+        {
+            context.save();
+            context.shadowBlur = 10;
+            context.shadowColor = "white";
+            context.strokeStyle = "white";
+            context.strokeRect(centerLocation.x - ((level.rowLength / 2) * size.x) - layersOffsetx + (i * previewOffsetx), centerLocation.y - ((level.columnLength / 2) * size.y), level.rowLength * size.x, level.columnLength * size.y);
+            context.restore();
+            
             var layer = level.getLayer(i);
             for(var j = 0; j < layer.length; ++j)
             {
-                var offsetx = ((layer[j].position.x - centerLocation.x)/ layer[j].sprite.size.x) * (size.x * 2);
+                var offsetx = ((layer[j].position.x - centerLocation.x)/ layer[j].sprite.size.x) * (size.x * 2) - layersOffsetx + (i * previewOffsetx);
                 var offsety = ((layer[j].position.y - centerLocation.y)/ layer[j].sprite.size.y) * (size.y * 2);
                 
                 context.save();
