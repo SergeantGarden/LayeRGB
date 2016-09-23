@@ -54,6 +54,9 @@ LevelLoadingManager.LoadLevels = function(levelData, levelCenterPosition, size)
             levelLayerObjects[j] = new Array();
             for(var k = 0; k < levelData[i].layers[j].length - 1; ++k)
             {
+                var height = startHeight + (Math.floor((k / rowLength)) * size.y) + (size.y / 2);
+                var width = startWidth + ((k % rowLength) * size.x) + (size.x / 2);
+                
                 switch(levelData[i].layers[j][k])
                 {
                     case "1":
@@ -71,17 +74,17 @@ LevelLoadingManager.LoadLevels = function(levelData, levelCenterPosition, size)
                                 break;
                         }
                         
-                        var height = startHeight + (Math.floor((k / rowLength)) * size.y) + (size.y / 2);
-                        var width = startWidth + ((k % rowLength) * size.x) + (size.x / 2);
+                        
                         
                         var wallAnimation = new Animation(Engine.currentGame["LayeRGB"].gameAssets[color], new Vector(64,64), 1);
                         wallAnimation.frameIndex = LevelLoadingManager.getWallIndex(levelData[i].layers[j], k, rowLength);
-                        var wall = new GameObject(new Vector(width, height), 0, new Vector(size.x/64, size.y/64), wallAnimation, false);
+                        var wall = new Wall(new Vector(width, height), 0, new Vector(size.x/64, size.y/64), wallAnimation, false);
                         levelLayerObjects[j].push(wall);
                         break;
                     case "2":
                         break;
                     case "3":
+                        //var endPortal = new GameObject(new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(), false);
                         break;
                     case "4":
                         break;
