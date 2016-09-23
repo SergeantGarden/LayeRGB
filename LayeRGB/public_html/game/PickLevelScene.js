@@ -31,7 +31,7 @@ function PickLevelScene(engine)
         if(input.keyboard.keyPressed(KEY_CODE.SPACE))
         {
             Engine.StopAllGameAudio("LayeRGB");
-            var scene = new GameScene(engine, this.level, this.levels);
+            var scene = new GameScene(engine, this.level, centerLocation, new Vector(32,32));
             engine.switchScene(scene, false);
         }
         if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
