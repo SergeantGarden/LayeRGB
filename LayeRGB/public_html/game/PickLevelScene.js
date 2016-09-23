@@ -87,12 +87,15 @@ function PickLevelScene(engine)
             var layer = level.getLayer(i);
             for(var j = 0; j < layer.length; ++j)
             {
-                var offsetx = ((layer[j].position.x - centerLocation.x)/ layer[j].sprite.size.x) * (size.x * 2) - layersOffsetx + (i * previewOffsetx);
-                var offsety = ((layer[j].position.y - centerLocation.y)/ layer[j].sprite.size.y) * (size.y * 2);
-                
-                context.save();
-                layer[j].sprite.Draw(context, new Vector(centerLocation.x + offsetx, centerLocation.y + offsety), 0, new Vector(size.x/layer[j].sprite.size.x, size.y/layer[j].sprite.size.y));
-                context.restore();
+                if(layer[j] instanceof Wall)
+                {
+                    var offsetx = ((layer[j].position.x - centerLocation.x)/ layer[j].sprite.size.x) * (size.x * 2) - layersOffsetx + (i * previewOffsetx);
+                    var offsety = ((layer[j].position.y - centerLocation.y)/ layer[j].sprite.size.y) * (size.y * 2);
+
+                    context.save();
+                    layer[j].sprite.Draw(context, new Vector(centerLocation.x + offsetx, centerLocation.y + offsety), 0, new Vector(size.x/layer[j].sprite.size.x, size.y/layer[j].sprite.size.y));
+                    context.restore();
+                }
             }
         }
         
