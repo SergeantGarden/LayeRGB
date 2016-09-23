@@ -50,6 +50,7 @@ LevelLoadingManager.LoadLevels = function(levelData, levelCenterPosition, size)
             var columnLength = ((levelData[i].layers[j].length -1) / rowLength);
             var startWidth = levelCenterPosition.x - ((rowLength * size.x) / 2);
             var startHeight = levelCenterPosition.y - (columnLength * size.y) / 2;
+            var startPosition = new Vector(0,0);
             
             levelLayerObjects[j] = new Array();
             for(var k = 0; k < levelData[i].layers[j].length - 1; ++k)
@@ -73,31 +74,38 @@ LevelLoadingManager.LoadLevels = function(levelData, levelCenterPosition, size)
                                 color = "Green";
                                 break;
                         }
-                        
-                        
-                        
                         var wallAnimation = new Animation(Engine.currentGame["LayeRGB"].gameAssets[color], new Vector(64,64), 1);
                         wallAnimation.frameIndex = LevelLoadingManager.getWallIndex(levelData[i].layers[j], k, rowLength);
                         var wall = new Wall(new Vector(width, height), 0, new Vector(size.x/64, size.y/64), wallAnimation, false);
                         levelLayerObjects[j].push(wall);
                         break;
                     case "2":
+                        startPosition = new Vector(width, height);
                         break;
                     case "3":
-                        //var endPortal = new GameObject(new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(), false);
+                        var endPortal = new EndPortal(new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["EndPortal"], new Vector(64,64), 1), false);
+                        levelLayerObjects[j].push(endPortal);
                         break;
                     case "4":
+                        var portal = new Portal(j + 1, new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["Portal"], new Vector(64,64), 1), false);
+                        levelLayerObjects[j].push(portal);
                         break;
                     case "5":
+                        var portal = new Portal(j - 1,new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["Portal"], new Vector(64,64), 1), false);
+                        levelLayerObjects[j].push(portal);
                         break;
                     case "6":
+                        var portal = new Portal(j + 2,new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["Portal"], new Vector(64,64), 1), false);
+                        levelLayerObjects[j].push(portal);
                         break;
                     case "7":
+                        var portal = new Portal(j - 2,new Vector(width, height), 0, new Vector(size.x/64, size.y/64), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["Portal"], new Vector(64,64), 1), false);
+                        levelLayerObjects[j].push(portal);
                         break;
                 }
             }
         }
-        level = new Level(levelData[i].name, levelData[i].id, levelLayerObjects, rowLength, columnLength);
+        level = new Level(levelData[i].name, levelData[i].id, levelLayerObjects, startPosition, rowLength, columnLength);
         LevelLoadingManager._levels[levelData[i].id] = level;
     }
 };

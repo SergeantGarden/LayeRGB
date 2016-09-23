@@ -21,11 +21,12 @@ var LEVEL_LAYER =
     GREEN: 2
 };
 
-function Level(name, id, layers, rowLength, columnLength)
+function Level(name, id, layers, startPosition, rowLength, columnLength)
 {
     this.name = name;
     this.id = id;
     this.layers = layers;
+    this.startPosition = startPosition;
     this.rowLength = rowLength;
     this.columnLength = columnLength;
     
