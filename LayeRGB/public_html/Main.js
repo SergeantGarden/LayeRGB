@@ -16,8 +16,6 @@
 
 window.onload = function(e)
 {
-    /* BUG: WHEN INITIATE MORE THAN ONE ENGINE INPUT DOES NOT REGISTER.
-     */
     $.getScript("engine/Engine.js", function() 
     {
         var engine = new Engine({x: 400, y: 320 }, "LayeRGB");
