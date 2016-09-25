@@ -48,8 +48,33 @@ function GameScene(engine, startLevel, centerPosition, size)
     
     GameScene.prototype.Draw = function(context)
     {
+        var color = "#000045";
+        var color2 = "#000080";
+
+        switch(this.currentLayer)
+        {
+            case LEVEL_LAYER.BLUE:
+                color = "#000045";
+                color2 = "#000080";
+                break;
+            case LEVEL_LAYER.RED:
+                color = "#450000";
+                color2 = "#800000";
+                break;
+            case LEVEL_LAYER.GREEN:
+                color = "#003500";
+                color2 = "#007000";
+                break;
+        }
+        
         context.save();
-        context.fillStyle = "black";
+        
+        var gradient = context.createLinearGradient(0,0,0, Engine.currentGame[engine.gameTitle].originalResolution.y);
+        gradient.addColorStop(0, color);
+        gradient.addColorStop(0.5, color2);
+        gradient.addColorStop(1, color);
+        
+        context.fillStyle = gradient;
         context.fillRect(0, 0, Engine.currentGame[engine.gameTitle].originalResolution.x, Engine.currentGame[engine.gameTitle].originalResolution.y);
         context.restore();
         
