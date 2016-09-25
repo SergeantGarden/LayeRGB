@@ -4,8 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Documents/Git%20Repositories/LayeRGB/LayeRGB/public_html/game/GameScene.js</file>
+            <file>file:/D:/Documents/Git%20Repositories/LayeRGB/LayeRGB/public_html/game/Player.js</file>
             <file>file:/D:/Documents/Git%20Repositories/LayeRGB/LayeRGB/public_html/game/Level.js</file>
-            <file>file:/D:/Documents/Git%20Repositories/LayeRGB/LayeRGB/public_html/game/PickLevelScene.js</file>
+            <file>file:/D:/Documents/Git%20Repositories/LayeRGB/LayeRGB/public_html/game/Portal.js</file>
             <file>file:/D:/Documents/Git%20Repositories/LayeRGB/LayeRGB/public_html/game/LevelLoadingManager.js</file>
         </group>
     </open-files>

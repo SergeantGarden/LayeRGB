@@ -21,6 +21,8 @@ function GameScene(engine, startLevel, centerPosition, size)
     this.currentLayer = 0;
     var level = LevelLoadingManager.getLevel(startLevel);
     
+    this.player = new Player(level.startPosition, new Vector(32,32));
+    
     for(var i = 0; i < level.getLayers().length; ++i)
     {
         for(var j = 0; j < level.getLayer(i).length; ++j)
@@ -35,6 +37,8 @@ function GameScene(engine, startLevel, centerPosition, size)
             }
         }
     }
+    
+    this.AddGameObject(this.player, "game");
     
     GameScene.prototype.Update = function(input, dt)
     {
