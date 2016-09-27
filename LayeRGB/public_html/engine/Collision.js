@@ -43,7 +43,16 @@ function Collision(type, player, properties)
         {
             var _size = new Vector(properties.size.x, properties.size.y);
             Object.defineProperty(this, "size", {
-                get: function() { return _size; }
+                get: function() 
+                { 
+                    var collisionSize = new Vector(_size.x * this.player.scale.x, _size.y * this.player.scale.y);
+                    return collisionSize; 
+                },
+                set: function(value) 
+                {
+                    if(value instanceof Vector && value.hasOwnProperty("x") && value.hasOwnProperty("y"))
+                    _size = value;
+                }
             });
             
             Object.defineProperty(this, "min", {

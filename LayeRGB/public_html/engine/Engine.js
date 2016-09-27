@@ -259,6 +259,12 @@ function Engine(resolution, title, canvasParent, folderPath)
         return obj === void 0;
     };
     
+    Engine.isHex = function(h)
+    {
+        var a = parseInt(h,16);
+        return (a.toString(16) === h.toLowerCase());
+    };
+    
     Engine.normalizeArg = function(arg)
     {
         if(Engine.isString(arg))

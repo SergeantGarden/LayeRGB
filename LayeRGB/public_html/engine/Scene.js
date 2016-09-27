@@ -20,6 +20,7 @@ function Scene(engine, delayTime)
     _private._gameObjects = [];
     _private._delayStart = delayTime || 0;
     _private._engine = engine;
+    _private._collisionGroups = [];
     
     Object.defineProperty(this, "private", {
         get: function() { return _private; }
@@ -88,6 +89,24 @@ function Scene(engine, delayTime)
         }
     };
     
+    this.AddCollisionGroup = function(objectTypeOne, objectTypeTwo, callback)
+    {
+        this.private._collisionGroups.push({1: objectTypeOne, 2:objectTypeTwo, callback:callback});
+        return true;
+    };
+
+    this.RemoveCollisionGroup = function(objectTypeOne, objectTypeTwo)
+    {
+        for(var i = this.private._collisionGroups.length -1; i >= 0; --i)
+        {
+            if((objectTypeOne == this.private._collisionGroups[i][1] && objectTypeTwo == this.private._collisionGroups[i][2]) ||
+                (objectTypeOne == this.private._collisionGroups[i][2] && objectTypeTwo == this.private._collisionGroups[i][1]))
+            {
+                this.private._collisionGroups.splice(i, 1);
+            }
+        }
+    };
+    
     this.AddLayer("background");
     this.AddLayer("game");
     this.AddLayer("foreground");
@@ -117,6 +136,15 @@ Scene.prototype.CheckCollision = function()
                                 {
                                     moveable[i].HandleCollision(moveable[j], collisionResult[1]);
                                     moveable[j].HandleCollision(moveable[i], collisionResult[2]);
+                                    
+                                    for(var k = this.private._collisionGroups.length -1; k >= 0; --k)
+                                    {
+                                        if((moveable[i] instanceof this.private._collisionGroups[k][1] && moveable[j] instanceof this.private._collisionGroups[k][2]) ||
+                                                (moveable[i] instanceof this.private._collisionGroups[k][2] && moveable[j] instanceof this.private._collisionGroups[k][1]))
+                                        {
+                                            this.private._collisionGroups[k].callback.call(this, moveable[i], moveable[j]);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -137,6 +165,15 @@ Scene.prototype.CheckCollision = function()
                                 {
                                     moveable[i].HandleCollision(immoveable[j], collisionResult[1]);
                                     immoveable[j].HandleCollision(moveable[i], collisionResult[2]);
+                                    
+                                    for(var k = this.private._collisionGroups.length -1; k >= 0; --k)
+                                    {
+                                        if((moveable[i] instanceof this.private._collisionGroups[k][1] && immoveable[j] instanceof this.private._collisionGroups[k][2]) ||
+                                                (moveable[i] instanceof this.private._collisionGroups[k][2] && immoveable[j] instanceof this.private._collisionGroups[k][1]))
+                                        {
+                                            this.private._collisionGroups[k].callback.call(this, moveable[i], immoveable[j]);
+                                        }
+                                    }
                                 }
                             }
                         }
