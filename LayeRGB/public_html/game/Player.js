@@ -16,7 +16,8 @@
 
 function Player(position, tileSize)
 {
-    GameObject.call(this, position, 0, new Vector(0.5,0.5), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["Player"], new Vector(64,64), 1), true);
+    GameObject.call(this, position, 0, new Vector(1,1), new Sprite(Engine.currentGame["LayeRGB"].gameAssets["Player"], tileSize, 1), true);
+    this.collision.size = new Vector(tileSize.x/2, tileSize.y/2);
     
     this.movementDirection = 0; // 0-idle 1-Left 2-Right 3-Up 4-Down
     this.timePassed = 0;
