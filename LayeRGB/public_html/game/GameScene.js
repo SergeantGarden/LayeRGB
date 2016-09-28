@@ -19,29 +19,9 @@ function GameScene(engine, startLevel, centerPosition, size)
     Scene.call(this);
     
     this.currentLayer = 0;
-    var level = LevelLoadingManager.getLevel(startLevel);
-    
-    this.currentLevel = level;
+    this.currentLevel = null;
     this.layerSwitched = false;
-    
-    this.player = new Player(level.startPosition, new Vector(32,32));
-    
-    for(var i = 0; i < level.getLayers().length; ++i)
-    {
-        for(var j = 0; j < level.getLayer(i).length; ++j)
-        {
-            this.AddGameObject(level.getLayer(i)[j], "game");
-            if(this.currentLayer === i)
-            {
-                level.getLayer(i)[j].active = true;
-            }else
-            {
-                level.getLayer(i)[j].active = false;
-            }
-        }
-    }
-    
-    this.AddGameObject(this.player, "game");
+    this.player = new Player(new Vector(0,0), new Vector(32,32));
     
     GameScene.prototype.Update = function(input, dt)
     {
@@ -89,19 +69,19 @@ function GameScene(engine, startLevel, centerPosition, size)
         
         context.save();
         context.strokeStyle = "rgba(255,255,255,0.2)";
-        for(var i = 1; i < level.rowLength; ++i)
+        for(var i = 1; i < this.currentLevel.rowLength; ++i)
         {
             context.beginPath();
-            context.moveTo(centerPosition.x - ((level.rowLength / 2) * size.x) + i * size.x, centerPosition.y - ((level.columnLength / 2) * size.y));
-            context.lineTo(centerPosition.x - ((level.rowLength / 2) * size.x) + i * size.x, centerPosition.y + ((level.columnLength / 2) * size.y));
+            context.moveTo(centerPosition.x - ((this.currentLevel.rowLength / 2) * size.x) + i * size.x, centerPosition.y - ((this.currentLevel.columnLength / 2) * size.y));
+            context.lineTo(centerPosition.x - ((this.currentLevel.rowLength / 2) * size.x) + i * size.x, centerPosition.y + ((this.currentLevel.columnLength / 2) * size.y));
             context.stroke();
             context.closePath();
         }
-        for(var i = 1; i < level.columnLength; ++i)
+        for(var i = 1; i < this.currentLevel.columnLength; ++i)
         {
             context.beginPath();
-            context.moveTo(centerPosition.x - ((level.rowLength / 2) * size.x), centerPosition.y - ((level.columnLength / 2) * size.y) + i * size.y);
-            context.lineTo(centerPosition.x + ((level.rowLength / 2) * size.x), centerPosition.y - ((level.columnLength / 2) * size.y) + i * size.y);
+            context.moveTo(centerPosition.x - ((this.currentLevel.rowLength / 2) * size.x), centerPosition.y - ((this.currentLevel.columnLength / 2) * size.y) + i * size.y);
+            context.lineTo(centerPosition.x + ((this.currentLevel.rowLength / 2) * size.x), centerPosition.y - ((this.currentLevel.columnLength / 2) * size.y) + i * size.y);
             context.stroke();
             context.closePath();
         }
@@ -111,15 +91,53 @@ function GameScene(engine, startLevel, centerPosition, size)
         context.shadowBlur = 10;
         context.shadowColor = "white";
         context.strokeStyle = "white";
-        context.strokeRect(centerPosition.x - ((level.rowLength / 2) * size.x), centerPosition.y - ((level.columnLength / 2) * size.y), level.rowLength * size.x, level.columnLength * size.y);
+        context.strokeRect(centerPosition.x - ((this.currentLevel.rowLength / 2) * size.x), centerPosition.y - ((this.currentLevel.columnLength / 2) * size.y), this.currentLevel.rowLength * size.x, this.currentLevel.columnLength * size.y);
         context.restore();
         
         Scene.prototype.Draw.call(this, context);
     };
     
-    GameScene.prototype.NextLevel = function(level)
+    GameScene.prototype.NextLevel = function(levelNumber)
     {
-        
+        this.RemoveLevel();
+        var level = LevelLoadingManager.getLevel(levelNumber);
+        this.currentLayer = 0;
+        if(level !== false)
+        {
+            for(var i = 0; i < level.getLayers().length; ++i)
+            {
+                for(var j = 0; j < level.getLayer(i).length; ++j)
+                {
+                    this.AddGameObject(level.getLayer(i)[j], "game");
+                    if(this.currentLayer === i)
+                    {
+                        level.getLayer(i)[j].active = true;
+                    }else
+                    {
+                        level.getLayer(i)[j].active = false;
+                    }
+                }
+            }
+            this.currentLevel = level;
+            this.player.position = new Vector(this.currentLevel.startPosition.x, this.currentLevel.startPosition.y);
+        }else
+        {
+            return false;
+        }
+    };
+    
+    GameScene.prototype.RemoveLevel = function()
+    {
+        if(this.currentLevel instanceof Level)
+        {
+            for(var i = 0; i < this.currentLevel.getLayers().length; ++i)
+            {
+                for(var j = 0; j < this.currentLevel.getLayer(i).length; ++j)
+                {
+                    this.RemoveGameObject(this.currentLevel.getLayer(i)[j], "game");
+                }
+            }
+        }
     };
     
     GameScene.prototype.SwitchLayer = function(layer)
@@ -145,6 +163,10 @@ function GameScene(engine, startLevel, centerPosition, size)
     {
         var player = objectOne instanceof Player? objectOne:objectTwo;
         var endPortal = objectOne instanceof EndPortal? objectOne:objectTwo;
+        if(!player.moving && (player.lastIdlePosition.x !== endPortal.position.x || player.lastIdlePosition.y !== endPortal.position.y))
+        {
+            this.NextLevel(this.currentLevel.id + 1);
+        }
     };
     
     this.PlayerPortalCollision = function(objectOne, objectTwo)
@@ -163,6 +185,8 @@ function GameScene(engine, startLevel, centerPosition, size)
     };
     this.AddCollisionGroup(Player, EndPortal, this.PlayerEndPortalCollision);
     this.AddCollisionGroup(Player, Portal, this.PlayerPortalCollision);
+    this.NextLevel(startLevel);
+    this.AddGameObject(this.player, "game");
 }
 
 GameScene.prototype = Object.create(Scene.prototype);
