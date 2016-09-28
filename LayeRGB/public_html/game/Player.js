@@ -106,6 +106,7 @@ function Player(position, tileSize)
                 {
                     //add steps
                 }
+                this.timedelay = 0;
                 this.movingDelayPassed = true;
             }
         }
@@ -126,6 +127,15 @@ function Player(position, tileSize)
     Player.prototype.HandleCollision = function(other, side)
     {
         GameObject.prototype.HandleCollision.call(this, other, side);
+        if(other instanceof Wall)
+        {
+            Engine.PlayAudio("LayeRGB", "Bump", 1);
+            this.position = this.lastIdlePosition;
+            this.movementDirection = 0;
+            this.moving = false;
+            this.timePassed = 0;
+            this.timedelay = 0.3;
+        }
     };
 }
 
