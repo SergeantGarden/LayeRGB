@@ -64,7 +64,6 @@ function PickLevelScene(engine)
         
         if(layers > 1)
         {
-            
             if(layers % 2 === 0)
             {
                 layersOffsetx = (((level.rowLength / 2) + 1) * size.x);
