@@ -44,13 +44,13 @@ LevelLoadingManager.LoadLevels = function(levelData, levelCenterPosition, size)
     {
         var level;
         var levelLayerObjects = new Array();
+        var startPosition = new Vector(0,0);
         for(var j = 0; j < levelData[i].layers.length; ++j)
         {
             var rowLength = parseInt(levelData[i].layers[j][levelData[i].layers[j].length - 1]);
             var columnLength = ((levelData[i].layers[j].length -1) / rowLength);
             var startWidth = levelCenterPosition.x - ((rowLength * size.x) / 2);
             var startHeight = levelCenterPosition.y - (columnLength * size.y) / 2;
-            var startPosition = new Vector(0,0);
             
             levelLayerObjects[j] = new Array();
             for(var k = 0; k < levelData[i].layers[j].length - 1; ++k)
