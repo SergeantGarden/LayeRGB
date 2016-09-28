@@ -42,8 +42,10 @@ function GameScene(engine, startLevel, centerPosition, size)
     
     GameScene.prototype.Update = function(input, dt)
     {
+        Engine.PlayAudio("LayeRGB", "GameMusic", 0.5);
         if(input.keyboard.keyPressed(KEY_CODE.ESCAPE))
         {
+            Engine.StopAllGameAudio("LayeRGB");
             var scene = new MenuScene(engine);
             engine.switchScene(scene, false);
         }
@@ -111,6 +113,20 @@ function GameScene(engine, startLevel, centerPosition, size)
         
         Scene.prototype.Draw.call(this, context);
     };
+    
+    this.PlayerEndPortalCollision = function(objectOne, objectTwo)
+    {
+        var player = objectOne instanceof Player? objectOne:objectTwo;
+        var endPortal = objectOne instanceof EndPortal? objectOne:objectTwo;
+    };
+    
+    this.PlayerPortalCollision = function(objectOne, objectTwo)
+    {
+        var player = objectOne instanceof Player? objectOne:objectTwo;
+        var portal = objectOne instanceof Portal? objectOne:objectTwo;
+    };
+    this.AddCollisionGroup(Player, EndPortal, this.PlayerEndPortalCollision);
+    this.AddCollisionGroup(Player, Portal, this.PlayerPortalCollision);
 }
 
 GameScene.prototype = Object.create(Scene.prototype);
