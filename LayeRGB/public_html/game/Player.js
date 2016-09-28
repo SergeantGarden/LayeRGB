@@ -23,10 +23,18 @@ function Player(position, tileSize)
     this.timePassed = 0;
     this.timedelay = 0;
     this.movingDelayPassed = true;
-    this.moving = false;
-    this.lastIdlePosition = position;
+    this._moving = false;
+    this._lastIdlePosition = position;
     this.tileSize = tileSize;
     this.maxSpeed = 128;
+    
+    Object.defineProperty(this, "moving", {
+        get: function() { return this._moving; }
+    });
+    
+    Object.defineProperty(this, "lastIdlePosition", {
+        get: function() { return this._lastIdlePosition; }
+    });
     
     Player.prototype.Update = function(input, dt)
     {
@@ -37,26 +45,26 @@ function Player(position, tileSize)
             if(input.keyboard.keyDown(KEY_CODE.LEFT))
             {
                 this.movementDirection = 1;
-                this.lastIdlePosition = new Vector(this.position.x, this.position.y);
-                this.moving = true;
+                this._lastIdlePosition = new Vector(this.position.x, this.position.y);
+                this._moving = true;
                 this.movingDelayPassed = false;
             }else if(input.keyboard.keyDown(KEY_CODE.RIGHT))
             {
                 this.movementDirection = 2;
-                this.lastIdlePosition = new Vector(this.position.x, this.position.y);
-                this.moving = true;
+                this._lastIdlePosition = new Vector(this.position.x, this.position.y);
+                this._moving = true;
                 this.movingDelayPassed = false;
             }else if(input.keyboard.keyDown(KEY_CODE.UP))
             {
                 this.movementDirection = 3;
-                this.lastIdlePosition = new Vector(this.position.x, this.position.y);
-                this.moving = true;
+                this._lastIdlePosition = new Vector(this.position.x, this.position.y);
+                this._moving = true;
                 this.movingDelayPassed = false;
             }else if(input.keyboard.keyDown(KEY_CODE.DOWN))
             {
                 this.movementDirection = 4;
-                this.lastIdlePosition = new Vector(this.position.x, this.position.y);
-                this.moving = true;
+                this._lastIdlePosition = new Vector(this.position.x, this.position.y);
+                this._moving = true;
                 this.movingDelayPassed = false;
             }
         }else
@@ -64,7 +72,7 @@ function Player(position, tileSize)
             switch(this.movementDirection)
             {
                 case 0:
-                    this.moving = false;
+                    this._moving = false;
                     this.timePassed += dt;
                     break;
                 case 1:
@@ -132,7 +140,7 @@ function Player(position, tileSize)
             Engine.PlayAudio("LayeRGB", "Bump", 1);
             this.position = this.lastIdlePosition;
             this.movementDirection = 0;
-            this.moving = false;
+            this._moving = false;
             this.timePassed = 0;
             this.timedelay = 0.3;
         }

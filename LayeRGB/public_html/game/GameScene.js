@@ -21,6 +21,9 @@ function GameScene(engine, startLevel, centerPosition, size)
     this.currentLayer = 0;
     var level = LevelLoadingManager.getLevel(startLevel);
     
+    this.currentLevel = level;
+    this.layerSwitched = false;
+    
     this.player = new Player(level.startPosition, new Vector(32,32));
     
     for(var i = 0; i < level.getLayers().length; ++i)
@@ -114,6 +117,30 @@ function GameScene(engine, startLevel, centerPosition, size)
         Scene.prototype.Draw.call(this, context);
     };
     
+    GameScene.prototype.NextLevel = function(level)
+    {
+        
+    };
+    
+    GameScene.prototype.SwitchLayer = function(layer)
+    {
+        if(layer >= 0 && layer <= 3);
+        this.currentLayer = layer;
+        for(var i = 0; i < this.currentLevel.getLayers().length; ++i)
+        {
+            for(var j = 0; j < this.currentLevel.getLayer(i).length; ++j)
+            {
+                if(this.currentLayer === i)
+                {
+                    this.currentLevel.getLayer(i)[j].active = true;
+                }else
+                {
+                    this.currentLevel.getLayer(i)[j].active = false;
+                }
+            }
+        }
+    };
+    
     this.PlayerEndPortalCollision = function(objectOne, objectTwo)
     {
         var player = objectOne instanceof Player? objectOne:objectTwo;
@@ -124,6 +151,15 @@ function GameScene(engine, startLevel, centerPosition, size)
     {
         var player = objectOne instanceof Player? objectOne:objectTwo;
         var portal = objectOne instanceof Portal? objectOne:objectTwo;
+        if(!player.moving && !this.layerSwitched && (player.lastIdlePosition.x !== portal.position.x || player.lastIdlePosition.y !== portal.position.y))
+        {
+            this.SwitchLayer(portal.layer);
+            this.layerSwitched = true;
+        }
+        if(this.layerSwitched && player.moving)
+        {
+            this.layerSwitched = false;
+        }
     };
     this.AddCollisionGroup(Player, EndPortal, this.PlayerEndPortalCollision);
     this.AddCollisionGroup(Player, Portal, this.PlayerPortalCollision);
