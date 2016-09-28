@@ -22,7 +22,8 @@ window.onload = function(e)
         engine.Resize({x:800, y: 640});
         engine.PreloadScripts("game/MenuScene.js, game/Player.js, game/Portal.js, game/EndPortal.js, game/Wall.js, game/Level.js, game/LevelLoadingManager.js, game/PickLevelScene.js, game/GameScene.js");
         engine.PreloadAssets("MainLogo:images/logo.png, MenuMusic:audio/MenuSong.mp3, MenuMove:audio/menuMove.mp3, Arrow:images/arrow.png,\n\
-        Blue:images/blue.png, Red:images/red.png, Green:images/green.png, EndPortal:images/finish_glow.png, Portal:images/switch.png, Player:images/player.png, Bump:audio/bump.mp3, GameMusic:audio/gameSong.mp3");
+        Blue:images/blue.png, Red:images/red.png, Green:images/green.png, EndPortal:images/finish_glow.png, Portal:images/switch.png, Player:images/player.png,\n\
+        Bump:audio/bump.mp3, GameMusic:audio/gameSong.mp3, Controls:images/controls_1.png");
         engine.onLoaded(function() {
             var scene = new MenuScene(engine);
             engine.Start(scene);
