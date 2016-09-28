@@ -67,6 +67,34 @@ function GameScene(engine, startLevel, centerPosition, size)
         context.fillRect(0, 0, Engine.currentGame[engine.gameTitle].originalResolution.x, Engine.currentGame[engine.gameTitle].originalResolution.y);
         context.restore();
         
+        
+        
+        if(this.currentLevel instanceof Level)
+        {
+            this.DrawGrid(context);
+        }
+        
+        Scene.prototype.Draw.call(this, context);
+        
+        if(this.currentLevel instanceof Level)
+        {
+            if(this.currentLevel.id === 1)
+            {
+                this.DrawInstructionMovement(context, new Vector(centerPosition.x, centerPosition.y + size.y / 2), new Vector(size.x * 3, size.y * 2));
+            }
+        }
+    };
+    
+    this.DrawInstructionMovement = function(ctx, position, size)
+    {
+        ctx.save();
+        ctx.translate(position.x, position.y);
+        ctx.drawImage(Engine.currentGame["LayeRGB"].gameAssets["Controls"], -size.x/2, -size.y/2, size.x, size.y);
+        ctx.restore();
+    };
+    
+    this.DrawGrid = function(context)
+    {
         context.save();
         context.strokeStyle = "rgba(255,255,255,0.2)";
         for(var i = 1; i < this.currentLevel.rowLength; ++i)
@@ -86,15 +114,13 @@ function GameScene(engine, startLevel, centerPosition, size)
             context.closePath();
         }
         context.restore();
-        
+
         context.save();
         context.shadowBlur = 10;
         context.shadowColor = "white";
         context.strokeStyle = "white";
         context.strokeRect(centerPosition.x - ((this.currentLevel.rowLength / 2) * size.x), centerPosition.y - ((this.currentLevel.columnLength / 2) * size.y), this.currentLevel.rowLength * size.x, this.currentLevel.columnLength * size.y);
         context.restore();
-        
-        Scene.prototype.Draw.call(this, context);
     };
     
     GameScene.prototype.NextLevel = function(levelNumber)
@@ -120,6 +146,7 @@ function GameScene(engine, startLevel, centerPosition, size)
             }
             this.currentLevel = level;
             this.player.position = new Vector(this.currentLevel.startPosition.x, this.currentLevel.startPosition.y);
+            return true;
         }else
         {
             return false;
@@ -165,7 +192,11 @@ function GameScene(engine, startLevel, centerPosition, size)
         var endPortal = objectOne instanceof EndPortal? objectOne:objectTwo;
         if(!player.moving && (player.lastIdlePosition.x !== endPortal.position.x || player.lastIdlePosition.y !== endPortal.position.y))
         {
-            this.NextLevel(this.currentLevel.id + 1);
+            if(!this.NextLevel(this.currentLevel.id + 1))
+            {
+                this.RemoveGameObject(player, "game");
+                this.currentLevel = null;
+            }
         }
     };
     
